@@ -3,7 +3,45 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- Código equivalente en Java -->
-    <!-- Malabarista concursante = new Malabarista(); -->
-    <bean id="solei" class="concursantes.Malabarista" />
+    <!-- 
+        Código equivalente en Java
+        Malabarista concursante = new Malabarista();
+    -->
+    <bean id="solei" 
+        class="concursantes.Malabarista">
+        <constructor-arg value="10" />
+    </bean>
+    
+    <!-- 
+        La lógica de ésta configuración es similar a la siguiente,
+        sin embargo String lo hace a través del API de Reflection
+         
+        Poema sonetoSorJuana = new Soneto();
+        Concursante concursante = new MalavaristaRecitador(10, sonetoSorJuana);
+     -->
+    <bean id="sonetoSorJuana"
+        class="concursantes.Soneto" />
+    
+    <bean id="soleiRecitador"
+        class="concursantes.MalabaristaRecitador">
+        <constructor-arg value="15" />
+        <constructor-arg ref="sonetoSorJuana" />
+    
+    </bean>
+    
+    <!-- Código músico -->
+    <bean id="piano" class="concursantes.Piano" />
+    
+    <bean id="jasonPiano" class="concursantes.Musico">
+        <property name="cancion" value="Noche de Paz" />
+        <property name="instrumento" ref="piano" />
+    </bean>
+    
+    <bean id="jasonSax" class="concursantes.Musico">
+        <property name="cancion" value="Equinox" />
+        <property name="instrumento">
+            <!-- Bean interno -->
+            <bean class="concursantes.Saxofon" />
+        </property>
+    </bean>
 </beans>
