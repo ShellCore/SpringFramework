@@ -1,8 +1,17 @@
 package concursantes;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component("jasonPiano")
 public class Musico implements Concursante {
 	
+	@Value("Noche de Paz")
 	private String cancion;
+	@Autowired
+	@Qualifier("piano")
 	private Instrumento instrumento;
 
 	public Musico() {
