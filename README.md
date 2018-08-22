@@ -8,3 +8,4 @@ En éste repositorio se encuentran todos los ejercicios realizados en el Módulo
 
 1. Proyecto Intérprete 1 (Aplicación Java sin Spring y sin programación orientada a interfaces)
 2. Proyecto Intérprete 2 (Utilización de Spring)
+3. Proyecto Concurso de talentos 1
