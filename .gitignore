@@ -3,3 +3,5 @@ Servers/
 .recommenders/
 spring-interprete-01/target/
 spring-consurso-talentos-01/target/
+springjdbc01/.idea/
+springjdbc01/target/

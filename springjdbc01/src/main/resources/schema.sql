@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS persona;
+
+CREATE TABLE persona (
+    id IDENTITY PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    paterno VARCHAR(50) NOT NULL,
+    materno VARCHAR(50),
+    email VARCHAR(50) NOT NULL UNIQUE
+);
