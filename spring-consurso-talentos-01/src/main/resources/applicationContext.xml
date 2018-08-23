@@ -2,10 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 		
 	<context:component-scan base-package="concursantes" />
+	<aop:aspectj-autoproxy />
 
     <!-- 
         Código equivalente en Java
@@ -48,4 +51,25 @@
             <bean class="concursantes.Saxofon" />
         </property>
     </bean>
+    
+    <!-- Configuración de AOP -->
+<!--     <aop:config> -->
+<!--         <aop:aspect ref="audiencia"> -->
+<!--             <aop:pointcut expression="execution(* concursantes.Concursante.ejecutar(..))" id="show"/> -->
+<!--             <aop:before method="sentarse" pointcut-ref="show" /> -->
+<!--             <aop:before method="apagarCelulares" pointcut-ref="show" /> -->
+<!--             <aop:after-returning method="aplaudir" pointcut-ref="show" /> -->
+<!--             <aop:after-throwing method="devolucion" pointcut-ref="show" /> -->
+<!--         </aop:aspect> -->
+<!--     </aop:config> -->
+
+    <!-- Configuración de AOP con Aspect Around -->
+<!--     <aop:config> -->
+<!--         <aop:aspect ref="audiencia"> -->
+<!--             <aop:pointcut expression="execution(* concursantes.Concursante.ejecutar(..))" id="show" /> -->
+<!--             <aop:around method="monitorearShow" pointcut-ref="show" /> -->
+<!--         </aop:aspect> -->
+<!--     </aop:config> -->
+
+    
 </beans>
