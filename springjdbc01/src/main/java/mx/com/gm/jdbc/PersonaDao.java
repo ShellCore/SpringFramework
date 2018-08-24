@@ -10,8 +10,8 @@ public interface PersonaDao {
 
     List<Persona> findAllPersonas();
     Persona findPersonaById(long id);
-    Persona findPersonaByEmail(String email);
+    Persona findPersonaByEmail(Persona persona);
 
     int contadorPersonas();
-    int contadorPersonasPorNombre(String nombre);
+    int contadorPersonasPorNombre(Persona persona);
 }

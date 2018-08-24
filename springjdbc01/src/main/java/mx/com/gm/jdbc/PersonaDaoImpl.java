@@ -1,10 +1,13 @@
 package mx.com.gm.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -24,8 +27,6 @@ public class PersonaDaoImpl implements PersonaDao {
     private static final String SQL_INSERT_PERSONA_I = "INSERT INTO persona (nombre, paterno, materno, email) VALUES (?, ?, ?, ?)";
     private static final String SQL_SELECT_PERSONA_BY_ID_I = SQL_SELECT_PERSONA + " WHERE id = ?";
 
-
-
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
 
@@ -38,15 +39,18 @@ public class PersonaDaoImpl implements PersonaDao {
     }
 
     public void insertPersona(Persona persona) {
-
+        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(persona);
+        namedParameterJdbcTemplate.update(SQL_INSERT_PERSONA, parameterSource);
     }
 
     public void updatePersona(Persona persona) {
-
+        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(persona);
+        namedParameterJdbcTemplate.update(SQL_UPDATE_PERSONA, parameterSource);
     }
 
     public void deletePersona(Persona persona) {
-
+        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(persona);
+        namedParameterJdbcTemplate.update(SQL_DELETE_PERSONA, parameterSource);
     }
 
     public List<Persona> findAllPersonas() {
@@ -56,11 +60,30 @@ public class PersonaDaoImpl implements PersonaDao {
     }
 
     public Persona findPersonaById(long id) {
-        return null;
+        Persona persona;
+
+        try {
+            // Utilizamos la clase PersonaRawMapper
+            persona = jdbcTemplate.queryForObject(SQL_SELECT_PERSONA_BY_ID_I, new PersonaRowMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            persona = null;
+        }
+
+        return persona;
+
+        // Ésta es otra forma de utilizar la clase PersonaRawWrapper
+//        BeanPropertyRowMapper<Persona> personaRowMapper = BeanPropertyRowMapper.newInstance(Persona.class);
+//        return jdbcTemplate.queryForObject(SQL_SELECT_PERSONA_BY_ID, personaRowMapper, id);
     }
 
-    public Persona findPersonaByEmail(String email) {
-        return null;
+    public Persona findPersonaByEmail(Persona persona) {
+        String sql = "SELECT * FROM persona WHERE email = :email";
+        SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(persona);
+
+        // Si no se tiene el objeto RowMapper, se puede utilizar la siguiente línea para crear éste objeto
+//        RowMapper<Persona> personaRowMapper = BeanPropertyRowMapper.newInstance(Persona.class);
+
+        return namedParameterJdbcTemplate.queryForObject(sql, namedParameters, new PersonaRowMapper());
     }
 
     public int contadorPersonas() {
@@ -72,7 +95,14 @@ public class PersonaDaoImpl implements PersonaDao {
 //                .queryForObject(sql, Integer.class);
     }
 
-    public int contadorPersonasPorNombre(String nombre) {
-        return 0;
+    public int contadorPersonasPorNombre(Persona persona) {
+        String sql = "SELECT COUNT(*) FROM persona WHERE nombre = :nombre";
+
+        // Permite evitar crear un MAP de parámetros y utilizar directamente el objeto Persona.
+        // Los atributos que coincidan con el nombre de los parámetros por nombre del query
+        // serán utilizados y proporcionados como atributos al query
+        SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(persona);
+
+        return namedParameterJdbcTemplate.queryForObject(sql, namedParameters, Integer.class);
     }
 }
